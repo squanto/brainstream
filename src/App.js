@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import './index.scss'
 import Form from "./Form"
 
 class App extends Component {
@@ -9,7 +7,6 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>Brainstream w00t</h1>
-          <img src={logo} className="App-logo" alt="logo" />
           <Form />
         </header>
       </div>
