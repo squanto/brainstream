@@ -1,9 +1,5 @@
 import React, { Component } from "react"
-// import * as fs from 'fs'
-// import * as ytdl from 'ytdl-core'
-// import { remote } from "electron"
 const remote = window.require("electron").remote
-// const fs = remote.require("fs")
 const ytdl = remote.require("ytdl-core")
 const ffmpeg = remote.require("fluent-ffmpeg")
 

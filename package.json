@@ -17,7 +17,7 @@
   "scripts": {
     "react-start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "ELECTRON_RUN_AS_NODE=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
     "electron-start": "node scripts/electron-wait-react",
