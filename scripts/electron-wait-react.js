@@ -15,7 +15,7 @@ const tryConnection = () => {
             console.log('starting electron')
             startedElectron = true
             const exec = require('child_process').exec
-            exec('npm run electron')
+            exec('yarn run electron')
         }
     })
 }
