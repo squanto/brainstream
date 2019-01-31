@@ -9,7 +9,14 @@ let mainWindow
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600 })
+    // Note to self: visit https://electronjs.org/docs/tutorial/security. and don't release with websecurity off
+    mainWindow = new BrowserWindow({
+        width: 1000,
+        height: 800,
+        webPreferences: {
+            webSecurity: false
+        }
+    })
 
     // and load the index.html of the app.
     const startURL = process.env.ELECTRON_START_URL || url.format({
