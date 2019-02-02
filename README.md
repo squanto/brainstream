@@ -31,15 +31,6 @@ On the root directory of the project please execute below command to start the t
 yarn start
 ```
 
-
-### TODO
-yarn test
-    jest vs mocha
-yarn run build
-    ci / cd / windows + linux builds
-yarn run eject
-    should it eject?
-
 ## Learn More
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

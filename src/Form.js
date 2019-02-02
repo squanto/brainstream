@@ -1,8 +1,5 @@
 import React, { Component } from "react"
-const remote = window.require("electron").remote
-const ytdl = remote.require("ytdl-core")
-const ffmpeg = remote.require("fluent-ffmpeg")
-
+import download from './download'
 
 class Form extends Component {
     constructor() {
@@ -11,7 +8,7 @@ class Form extends Component {
             videoURL: "",
             filename: "",
             status: "",
-            downloadedAmount: ""
+            downloadedPercent: ""
         }
         this.handleInput = this.handleInput.bind(this)
         this.submit = this.submit.bind(this)
@@ -23,26 +20,18 @@ class Form extends Component {
 
     async submit(event) {
         event.preventDefault()
-        // send the stuff to download
-        console.log("form submitted: ", this.state)
         try {
-            // get some info set
-            const info = await ytdl.getInfo(this.state.videoURL)
-            const filename = info.title.replace('|', '').toString('ascii')
-            this.setState({ filename: filename, status: "downloading" })
-
-            // download and convert
-            const videoReadStream = ytdl(this.state.videoURL, { quality: 'highestaudio' })
-            ffmpeg(videoReadStream)
-                .audioBitrate(128)
-                .on('progress', (p) => {
-                    console.log("progress: ", p) // currentFps, currentKbps, frames, targetSize, timemark
-                    this.setState({ downloadedAmount: p.targetSize + "kb" })
-                })
-                .on('end', () => {
-                    this.setState({ status: "done" })
-                })
-                .save(`${filename}.mp3`)
+            await download({
+                url: this.state.videoURL,
+                onStart: (videoName) => this.setState({ filename: videoName, status: "downloading" }),
+                onProgress: (chunkLength, downloaded, total) => {
+                    const mbDownloaded = (downloaded / 1024 / 1024).toFixed(2)
+                    const percent = (downloaded / total * 100).toFixed(2)
+                    console.debug("mbDownloaded: ", mbDownloaded)
+                    this.setState({ downloadedPercent: percent + "%" })
+                },
+                onDone: () => this.setState({ status: "done" })
+            })
         } catch (error) {
             console.error("oh noes", error)
         }
@@ -51,7 +40,7 @@ class Form extends Component {
     render() {
         return (
             <form>
-                <h2>{this.state.filename ? `Downloading ${this.state.filename} ${this.state.downloadedAmount}` : 'Download Video'}</h2>
+                <h2>{this.state.filename ? `Downloading ${this.state.filename} ${this.state.downloadedPercent}` : 'Download Video'}</h2>
                 <p>{this.state.status}</p>
                 <input type="text" value={this.state.videoURL} onChange={this.handleInput} placeholder="playlist url" />
                 <button onClick={this.submit}>Add</button>
