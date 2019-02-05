@@ -9,12 +9,14 @@ let mainWindow
 
 function createWindow() {
     // Create the browser window.
-    // Note to self: visit https://electronjs.org/docs/tutorial/security. and don't release with websecurity off
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 800,
         webPreferences: {
-            webSecurity: false
+            // TODO: visit https://electronjs.org/docs/tutorial/security. and don't release with websecurity off
+            webSecurity: false,
+            // Electron 5 will disable node integration by default
+            nodeIntegration: true
         }
     })
 

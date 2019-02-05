@@ -1,14 +1,15 @@
 import React, { Component } from "react"
-import download from './download'
+import downloadVideo from './downloader'
 
 class Form extends Component {
     constructor() {
         super()
         this.state = {
             videoURL: "",
-            filename: "",
+            videoTitle: "",
             status: "",
-            downloadedPercent: ""
+            downloadedPercent: "",
+            downloadedMB: ""
         }
         this.handleInput = this.handleInput.bind(this)
         this.submit = this.submit.bind(this)
@@ -21,14 +22,16 @@ class Form extends Component {
     async submit(event) {
         event.preventDefault()
         try {
-            await download({
+            await downloadVideo({
                 url: this.state.videoURL,
-                onStart: (videoName) => this.setState({ filename: videoName, status: "downloading" }),
+                onStart: (videoTitle) => this.setState({ videoTitle, status: "downloading" }),
                 onProgress: (chunkLength, downloaded, total) => {
-                    const mbDownloaded = (downloaded / 1024 / 1024).toFixed(2)
+                    const downloadedMB = (downloaded / 1024 / 1024).toFixed(2)
                     const percent = (downloaded / total * 100).toFixed(2)
-                    console.debug("mbDownloaded: ", mbDownloaded)
-                    this.setState({ downloadedPercent: percent + "%" })
+                    this.setState({
+                        downloadedPercent: percent,
+                        downloadedMB: downloadedMB
+                    })
                 },
                 onDone: () => this.setState({ status: "done" })
             })
@@ -40,8 +43,12 @@ class Form extends Component {
     render() {
         return (
             <form>
-                <h2>{this.state.filename ? `Downloading ${this.state.filename} ${this.state.downloadedPercent}` : 'Download Video'}</h2>
-                <p>{this.state.status}</p>
+                <h2>Download Video</h2>
+                {!!this.state.status && <div>
+                    <h4>`Downloading ${this.state.videoTitle} {this.state.downloadedPercent}%`</h4>
+                    <p>downloaded {this.state.downloadedMB} mb</p>
+                    <p>{this.state.status}</p>
+                </div>}
                 <input type="text" value={this.state.videoURL} onChange={this.handleInput} placeholder="playlist url" />
                 <button onClick={this.submit}>Add</button>
             </form>

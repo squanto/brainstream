@@ -1,18 +1,19 @@
 const remote = window.require("electron").remote
 const ytdl = remote.require("ytdl-core")
 const ffmpeg = remote.require("fluent-ffmpeg")
+const path = remote.require("path")
 
 const BITRATE = 128
 
-async function download(options = {}) {
+export async function downloadVideo(options = {}) {
     try {
         // get video info
         const info = await ytdl.getInfo(options.url)
-        const videoName = info.title.replace('|', '').toString('ascii')
-        options.onStart(videoName)
+        const videoTitle = info.title.replace('|', '').toString('ascii')
+        options.onStart(videoTitle)
         // Sanitize filename
-        const titleRe = /[:\s]+/g
-        const filename = `${videoName.replace(titleRe, "_").toLowerCase()}.mp3`
+        const titleRe = /[:\s'"-)(]+/g
+        const filename = path.join('./tmp/', `${videoTitle.replace(titleRe, "_").toLowerCase()}.mp3`)
         // download and convert video to mp3
         const videoReadStream = ytdl(options.url, { quality: 'highestaudio' })
             .on('progress', options.onProgress)
@@ -25,4 +26,4 @@ async function download(options = {}) {
     }
 }
 
-export default download
+export default downloadVideo
