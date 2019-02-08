@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Form from "./Form"
+import DownloadForm from "./DownloadForm"
 
 class App extends Component {
   render() {
@@ -7,7 +7,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>Brainstream</h1>
-          <Form />
+          <DownloadForm />
         </header>
       </div>
     )
