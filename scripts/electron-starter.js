@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, session } = require('electron')
 const path = require('path')
 const url = require('url')
 
@@ -8,28 +8,45 @@ const url = require('url')
 let mainWindow
 
 function createWindow() {
+    // TODO: make env var spearate + more explicit
+    const isDevelopmentEnv = !!process.env.ELECTRON_START_URL
+
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 800,
         webPreferences: {
-            // TODO: visit https://electronjs.org/docs/tutorial/security. and don't release with websecurity off
-            webSecurity: false,
-            // Electron 5 will disable node integration by default
-            nodeIntegration: true
+            // Will be default later, but disable node code running directly in browser
+            nodeIntegration: false,
+            // Load node code that can run in browser
+            preload: path.join(__dirname, '..', 'src', 'services', 'index'),
+            // Disable devtools in production.
+            devTools: isDevelopmentEnv
         }
+    })
+
+    // Set CSP, via: https://electronjs.org/docs/tutorial/security
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+        callback({
+            responseHeaders: {
+                ...details.responseHeaders,
+                'Content-Security-Policy': ["script-src 'self'"]
+            }
+        })
     })
 
     // and load the index.html of the app.
     const startURL = process.env.ELECTRON_START_URL || url.format({
-        pathname: path.join(__dirname, './build/index.html'),
+        pathname: path.join(__dirname, '..', './build/index.html'),
         protocol: 'file:',
         slashes: true
     })
     mainWindow.loadURL(startURL)
 
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    // Open the DevTools in development mode
+    if (isDevelopmentEnv) {
+        mainWindow.webContents.openDevTools()
+    }
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {

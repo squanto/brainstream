@@ -1,4 +1,4 @@
-// Wait for react dev server to start then start electron
+// Waits for react dev server to start then start electron
 const net = require('net')
 const port = process.env.PORT ? (process.env.PORT - 100) : 3000
 
