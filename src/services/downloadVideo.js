@@ -12,23 +12,28 @@ const BITRATE = 128
         onDone: a callback for a completed download
 */
 async function downloadVideo(options = {}) {
-    try {
-        // get video info
-        const videoTitle = options.videoTitle
-        options.onStart(videoTitle)
-        // Sanitize filename
-        const titleRe = /[:\s'"--)(.]+/g
-        const filename = path.join('./tmp/', `${videoTitle.replace(titleRe, "_").toLowerCase()}.mp3`)
-        // download and convert video to mp3
-        const videoReadStream = ytdl(options.id, { quality: 'highestaudio' })
-            .on('progress', options.onProgress)
-        return ffmpeg(videoReadStream)
-            .audioBitrate(BITRATE)
-            .on('end', options.onDone)
-            .save(filename)
-    } catch (error) {
-        console.error(`error downloading video id: ${options.id}`, error)
-    }
+  try {
+    // get video info
+    const videoTitle = options.videoTitle
+    options.onStart(videoTitle)
+    // Sanitize filename
+    const titleRe = /[:\s'"--)(.]+/g
+    const filename = path.join(
+      "./tmp/",
+      `${videoTitle.replace(titleRe, "_").toLowerCase()}.mp3`
+    )
+    // download and convert video to mp3
+    const videoReadStream = ytdl(options.id, { quality: "highestaudio" }).on(
+      "progress",
+      options.onProgress
+    )
+    return ffmpeg(videoReadStream)
+      .audioBitrate(BITRATE)
+      .on("end", options.onDone)
+      .save(filename)
+  } catch (error) {
+    console.error(`error downloading video id: ${options.id}`, error)
+  }
 }
 
 module.exports = downloadVideo

@@ -1,5 +1,5 @@
-const Downloader = require('./downloader')
+const Downloader = require("./downloader")
 
 window.desktop = {
-    Downloader
+  Downloader
 }
