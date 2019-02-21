@@ -1,14 +1,14 @@
 import React, { Component } from "react"
 import DownloadForm from "./DownloadForm"
+import LocalFiles from "./LocalFiles"
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>Brainstream</h1>
-          <DownloadForm />
-        </header>
+        <h1 className="App-header">Brainstream</h1>
+        <DownloadForm />
+        <LocalFiles />
       </div>
     )
   }
