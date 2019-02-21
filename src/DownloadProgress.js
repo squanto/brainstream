@@ -7,7 +7,6 @@ class DownloadProgress extends Component {
     this.state = {
       status: "",
       videoTitle: props.videoTitle,
-      id: props.id, // maybe unnecessary
       downloadedPercent: "",
       downloadedMB: ""
     }
@@ -22,7 +21,7 @@ class DownloadProgress extends Component {
         const downloadedPercent = ((downloaded / total) * 100).toFixed(2)
         this.setState({ downloadedPercent, downloadedMB })
       },
-      onDone: () => this.setState({ status: "done" })
+      onEnd: () => this.setState({ status: "done" })
     })
   }
 

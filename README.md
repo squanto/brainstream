@@ -19,6 +19,7 @@ yarn install
 ```
 
 ### Initialize Environment variables
+
 ```
 cp `.env.example` to `.env`
 ```

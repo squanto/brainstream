@@ -9,7 +9,7 @@ class Downloader {
   constructor(playlistURL) {
     this.extracted = false
     this.videoInfos = [] // id, name tuples
-    this.videoInfoToDownload = [] // videoTitle, url/id, onProgress, onDone
+    this.videoInfoToDownload = [] // videoTitle, url/id, onProgress, onEnd
   }
 
   // loads list of { videoID, videoName }'s
@@ -23,7 +23,7 @@ class Downloader {
     this.videoInfoToDownload.push(options)
   }
 
-  // For each video, provide: videoTitle, url, onProgress, onDone
+  // For each video, provide: videoTitle, url, onProgress, onEnd
   async downloadVideos() {
     if (!this.extracted) {
       console.error("extract video info before downloading")
