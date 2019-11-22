@@ -15,11 +15,14 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    "node-integration": "iframe", // and this line
     webPreferences: {
+      "web-security": false,
+
       // Will be default later, but disable node code running directly in browser
       nodeIntegration: false,
       // Load node code that can run in browser
-      preload: path.join(__dirname, "..", "src", "services", "index"),
+      preload: path.join(__dirname, "..", "src", "services", "index.js"),
       // Disable devtools in production.
       devTools: isDevelopmentEnv
     }
