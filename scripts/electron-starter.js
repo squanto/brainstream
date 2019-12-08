@@ -18,6 +18,7 @@ function createWindow() {
     "node-integration": "iframe", // and this line
     webPreferences: {
       "web-security": false,
+      "node-integration": "iframe", // and this line
 
       // Will be default later, but disable node code running directly in browser
       nodeIntegration: false,
